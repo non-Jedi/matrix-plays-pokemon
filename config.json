@@ -1,0 +1,8 @@
+{
+    "hs_name": "matrix.org",
+    "hs_address": "http://localhost:8008",
+    "local_room_alias": "mpp",
+    "local_user_id": "_mpp_bot",
+    "token": "example_token",
+    "rom_location": "/path/to/gba/rom"
+}

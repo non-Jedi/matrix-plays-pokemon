@@ -1,0 +1,13 @@
+id: matrix-plays-pokemon
+url: http://localhost:19050
+as_token: example_token
+hs_token: example_token
+sender_localpart: "_mpp_bot"
+namespaces:
+  users:
+    - exclusive: true
+      regex: "@_mpp.*"
+  aliases:
+    - exclusive: true
+      regex: "#mpp.*"
+  rooms: []
