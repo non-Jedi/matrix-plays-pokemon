@@ -4,5 +4,6 @@
     "local_room_alias": "mpp",
     "local_user_id": "_mpp_bot",
     "token": "example_token",
-    "rom_location": "/path/to/gba/rom"
+    "rom_location": "/path/to/gba/rom",
+    "bios_location": "/path/to/gba/bios"
 }

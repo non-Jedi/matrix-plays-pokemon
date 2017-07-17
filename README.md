@@ -1,14 +1,14 @@
 # Matrix Plays Pokemon
 
-This will run a user-specified gameboy advance rom on MESS and stream
+This will run a user-specified gameboy advance rom on mgba and stream
 screenshots of the running game to a public room on matrix. It will also look at
 that matrix room for commands to send to the game.
 
 ## Requirements
 
-- MESS (install MAME on most systems)
+- mgba
 - python3
-- gba bios installed for MESS
+- gba bios
 
 ## Usage
 

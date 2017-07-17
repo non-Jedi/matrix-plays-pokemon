@@ -39,7 +39,7 @@ class MPPServer:
 
         self.disp = SmartDisplay(visible=False, size=(240, 160))
         self.disp.start()
-        self.pkmn = EasyProcess("mess gba -cart '" + self.config["rom_location"] + "'")
+        self.pkmn = EasyProcess("mgba -b '" + self.config["bios_location"] + "'" + self.config["rom_location"] + "'")
         self.pkmn.start()
         self.keyboard = Controller()
 
@@ -92,21 +92,21 @@ class MPPServer:
               event.content["msgtype"] == "m.text"):
                 content = event.content["body"].lower()
                 if content == "a":
-                    self.keyboard.press(Key.alt)
+                    self.keyboard.press("x")
                     time.sleep(0.05)
-                    self.keyboard.release(Key.alt)
+                    self.keyboard.release("x")
                 elif content == "b":
-                    self.keyboard.press(Key.ctrl)
+                    self.keyboard.press("z")
                     time.sleep(0.05)
-                    self.keyboard.release(Key.ctrl)
+                    self.keyboard.release("z")
                 elif content == "l":
-                    self.keyboard.press(Key.space)
+                    self.keyboard.press("a")
                     time.sleep(0.05)
-                    self.keyboard.release(Key.space)
+                    self.keyboard.release("a")
                 elif content == "r":
-                    self.keyboard.press(Key.shift)
+                    self.keyboard.press("s")
                     time.sleep(0.05)
-                    self.keyboard.release(Key.shift)
+                    self.keyboard.release("s")
                 elif content == "up":
                     self.keyboard.press(Key.up)
                     time.sleep(0.05)
@@ -124,13 +124,13 @@ class MPPServer:
                     time.sleep(0.05)
                     self.keyboard.release(Key.right)
                 elif content == "start":
-                    self.keyboard.press("1")
+                    self.keyboard.press(Key.enter)
                     time.sleep(0.05)
-                    self.keyboard.release("1")
+                    self.keyboard.release(Key.enter)
                 elif content == "select":
-                    self.keyboard.press("5")
+                    self.keyboard.press(Key.backspace)
                     time.sleep(0.05)
-                    self.keyboard.release("5")
+                    self.keyboard.release(Key.backspace)
             self.send_screenshot()
         return True
 
