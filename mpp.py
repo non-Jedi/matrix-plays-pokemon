@@ -31,8 +31,6 @@ pulse.start()
 with open("config.json") as f:
     config = json.load(f)
 
-# when creating a room with a room alias, only local part of alias is used
-
 application = server.Application(config["hs_address"], config["token"])
 
 class MPPServer:
@@ -51,7 +49,7 @@ class MPPServer:
 
         self.api = application.Api()
         try:
-            # try to create room
+            # when creating a room with a room alias, only local part of alias is used
             self.room_id = self.api.create_room(alias=self.config["local_room_alias"],
                                                 is_public=True)
         except exceptions.MatrixError:
@@ -101,47 +99,33 @@ class MPPServer:
               event.content["msgtype"] == "m.text"):
                 content = event.content["body"].lower()
                 if content == "a":
-                    self.keyboard.press("x")
-                    time.sleep(0.05)
-                    self.keyboard.release("x")
+                    self._press_key("x")
                 elif content == "b":
-                    self.keyboard.press("z")
-                    time.sleep(0.05)
-                    self.keyboard.release("z")
+                    self._press_key("z")
                 elif content == "l":
-                    self.keyboard.press("a")
-                    time.sleep(0.05)
-                    self.keyboard.release("a")
+                    self._press_key("a")
                 elif content == "r":
-                    self.keyboard.press("s")
-                    time.sleep(0.05)
-                    self.keyboard.release("s")
+                    self._press_key("s")
                 elif content == "up":
-                    self.keyboard.press(Key.up)
-                    time.sleep(0.05)
-                    self.keyboard.release(Key.up)
+                    self._press_key(Key.up)
                 elif content == "down":
-                    self.keyboard.press(Key.down)
-                    time.sleep(0.05)
-                    self.keyboard.release(Key.down)
+                    self._press_key(Key.down)
                 elif content == "left":
-                    self.keyboard.press(Key.left)
-                    time.sleep(0.05)
-                    self.keyboard.release(Key.left)
+                    self._press_key(Key.left)
                 elif content == "right":
-                    self.keyboard.press(Key.right)
-                    time.sleep(0.05)
-                    self.keyboard.release(Key.right)
+                    self._press_key(Key.right)
                 elif content == "start":
-                    self.keyboard.press(Key.enter)
-                    time.sleep(0.05)
-                    self.keyboard.release(Key.enter)
+                    self._press_key(Key.enter)
                 elif content == "select":
-                    self.keyboard.press(Key.backspace)
-                    time.sleep(0.05)
-                    self.keyboard.release(Key.backspace)
+                    self._press_key(Key.backspace)
             self.send_screenshot()
         return True
+
+    def _press_key(key):
+        self.keyboard.press(key)
+        # make sure the key is pressed long enought to register with mgba
+        time.sleep(0.05)
+        self.keyboard.release(key)
 
 mpp = MPPServer(application, config)
 application.add_handlers(room_handler=mpp.room_handler,
