@@ -8,12 +8,15 @@ that matrix room for commands to send to the game.
 
 - mgba
 - python3
+- xvfb
+- pulseaudio (don't ask)
 - gba bios
+- gba rom
 
 ## Usage
 
 1. Clone this repo and modify config.json and registration.yaml for your
    homeserver.
 2. Add registration.yaml to your homeservers app-services
-3. `pip install -r requirements.txt`
+3. `pip3 install -r requirements.txt`
 4. `gunicorn -b localhost:19050 mpp:application`
