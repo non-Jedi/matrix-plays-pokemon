@@ -13,13 +13,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pynput.keyboard import Key, Controller
 from gyr import server, matrix_objects, exceptions
 from pyvirtualdisplay.smartdisplay import SmartDisplay
 from easyprocess import EasyProcess
 import time
 import json
 from io import BytesIO
+
+# Must start display before we can use Xlib via pynput
+disp = SmartDisplay(visible=False, size=(240, 160))
+disp.start()
+from pynput.keyboard import Key, Controller
+# Have to start pulse here because computer is being a weenie
+pulse = EasyProcess("pulseaudio")
+pulse.start()
 
 with open("config.json") as f:
     config = json.load(f)
@@ -37,9 +44,8 @@ class MPPServer:
         self.config["user_id"] = ("@" + self.config["local_user_id"] +
                                   ":" + self.config["hs_name"])
 
-        self.disp = SmartDisplay(visible=False, size=(240, 160))
-        self.disp.start()
-        self.pkmn = EasyProcess("mgba -b '" + self.config["bios_location"] + "'" + self.config["rom_location"] + "'")
+        self.disp = disp
+        self.pkmn = EasyProcess("mgba -b " + self.config["bios_location"] + " " + self.config["rom_location"])
         self.pkmn.start()
         self.keyboard = Controller()
 
@@ -72,10 +78,13 @@ class MPPServer:
     def _send(self):
         img = self.disp.grab()
         f = BytesIO()
-        img.save(f, format="JPEG", quality=50, optimize=True)
-        mxc = self.api.media_upload(f.getvalue(), "image/jpeg")["content_uri"]
-        file_name = str(int(self.ts)) + ".jpg"
-        self.api.send_content(self.room_id, mxc, file_name, "m.image")
+        try:
+            img.save(f, format="JPEG", quality=50, optimize=True)
+            mxc = self.api.media_upload(f.getvalue(), "image/jpeg")["content_uri"]
+            file_name = str(int(self.ts)) + ".jpg"
+            self.api.send_content(self.room_id, mxc, file_name, "m.image")
+        except AttributeError:
+            self.api.send_notice(self.room_id, "Error in capturing screenshot")
 
     def room_handler(self, room_alias):
         # Only room created is #matrixplayspokemon
