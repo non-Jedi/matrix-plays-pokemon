@@ -46,6 +46,7 @@ class MPPServer:
         self.pkmn = EasyProcess("mgba -b " + self.config["bios_location"] + " " + self.config["rom_location"])
         self.pkmn.start()
         self.keyboard = Controller()
+        self._load()
 
         self.api = application.Api()
         try:
@@ -84,6 +85,15 @@ class MPPServer:
         except AttributeError:
             self.api.send_notice(self.room_id, "Error in capturing screenshot")
 
+    def _save(self):
+        if self.ts:
+            if self.ts + 100 < time.time():
+                with keyboard.pressed(Key.shift):
+                    self._press_key(Key.f1)
+
+    def _load(self):
+        self._press_key(Key.f1)
+
     def room_handler(self, room_alias):
         # Only room created is #matrixplayspokemon
         return room_alias == self.config["room_alias"]
@@ -119,6 +129,7 @@ class MPPServer:
                 elif content == "select":
                     self._press_key(Key.backspace)
             self.send_screenshot()
+            self._save()
         return True
 
     def _press_key(key):
