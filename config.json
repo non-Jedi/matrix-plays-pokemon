@@ -1,4 +1,5 @@
 {
+    "debug": "false",
     "hs_name": "matrix.org",
     "hs_address": "http://localhost:8008",
     "local_room_alias": "mpp",
