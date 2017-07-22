@@ -61,8 +61,6 @@ class MPPServer:
         self.keyboard = Controller()
         self.api = application.Api()
 
-        self._start_mgba()
-
         try:
             # when creating a room with a room alias, only local part of alias is used
             self.room_id = self.api.create_room(alias=self.config["local_room_alias"],
@@ -72,6 +70,8 @@ class MPPServer:
             # if it already exists just get the room_id
             self.room_id = self.api.get_room_id(self.config["room_alias"])
             logger.info("using existing room: " + self.room_id)
+
+        self._start_mgba()
 
     def _start_mgba(self):
         self.pkmn = EasyProcess("mgba -s 2 -b " +
