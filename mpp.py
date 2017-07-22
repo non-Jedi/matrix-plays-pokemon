@@ -183,8 +183,8 @@ class MPPServer:
 
     def _dump(self):
         self.pkmn.stop()
-        self.warning("mgba stdout: " + self.pkmn.stdout)
-        self.warning("mgba stderr: " + self.pkmn.stderr)
+        logger.warning("mgba stdout: " + self.pkmn.stdout)
+        logger.warning("mgba stderr: " + self.pkmn.stderr)
         self._start_mgba()
 
 mpp = MPPServer(application, config)
