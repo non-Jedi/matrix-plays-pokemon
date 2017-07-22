@@ -58,10 +58,11 @@ class MPPServer:
                                   ":" + self.config["hs_name"])
 
         self.disp = disp
-        self._start_mgba()
-
         self.keyboard = Controller()
         self.api = application.Api()
+
+        self._start_mgba()
+
         try:
             # when creating a room with a room alias, only local part of alias is used
             self.room_id = self.api.create_room(alias=self.config["local_room_alias"],
