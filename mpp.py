@@ -43,10 +43,9 @@ class MPPServer:
                                   ":" + self.config["hs_name"])
 
         self.disp = disp
-        self.pkmn = EasyProcess("mgba -b " + self.config["bios_location"] + " " + self.config["rom_location"])
+        self.pkmn = EasyProcess("mgba -s 2 -b " + self.config["bios_location"] + " " + self.config["rom_location"])
         self.pkmn.start()
         self.keyboard = Controller()
-        self._load()
 
         self.api = application.Api()
         try:
@@ -57,8 +56,9 @@ class MPPServer:
             # if it already exists just get the room_id
             self.room_id = self.api.get_room_id(self.config["room_alias"])
 
-        self.ts = False
+        self.ts = time.time()
         time.sleep(5)
+        self._load()
         self.send_screenshot()
 
     def __del__(self):
@@ -66,11 +66,7 @@ class MPPServer:
         self.disp.stop()
 
     def send_screenshot(self):
-        if self.ts:
-            if self.ts + 2 < time.time():
-                self._send()
-                self.ts = time.time()
-        else:
+        if self.ts + 2 < time.time():
             self._send()
             self.ts = time.time()
 
@@ -132,7 +128,7 @@ class MPPServer:
             self._save()
         return True
 
-    def _press_key(key):
+    def _press_key(self, key):
         self.keyboard.press(key)
         # make sure the key is pressed long enought to register with mgba
         time.sleep(0.05)
