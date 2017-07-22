@@ -110,7 +110,7 @@ class MPPServer:
     def _save(self):
         if self.ts:
             if self.ts + 100 < time.time():
-                with keyboard.pressed(Key.shift):
+                with self.keyboard.pressed(Key.shift):
                     self._press_key(Key.f1)
                 logger.debug("saved current gamestate to f1")
 
@@ -160,7 +160,7 @@ class MPPServer:
                     self._dump()
                 elif content == "save" and self.config["debug"]:
                     logger.debug("received save command")
-                    with keyboard.pressed(Key.shift):
+                    with self.keyboard.pressed(Key.shift):
                         self._press_key(Key.f1)
                     logger.debug("saved current gamestate to f1")
                 elif content == "load" and self.config["debug"]:
