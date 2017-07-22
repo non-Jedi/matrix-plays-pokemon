@@ -168,7 +168,7 @@ class MPPServer:
                     self._load()
 
             logger.debug("handled " + event.type +
-                         " from " + event.mxid +
+                         #" from " + event.mxid +
                          " in " + event.id)
             self.send_screenshot()
             self._save()
