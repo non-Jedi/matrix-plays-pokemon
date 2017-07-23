@@ -81,6 +81,7 @@ class MPPServer:
         logger.info("mgba started")
 
         self.ts = time.time()
+        self.save_timers = [[index, time.time(), l, f] for index, (l, f) in enumerate(((50, Key.f1), (1000, Key.f2), (10000, Key.f3), (50000, Key.f4), (100000, Key.f5)))]
         time.sleep(5)
         self._load()
         self.send_screenshot()
@@ -108,11 +109,13 @@ class MPPServer:
             logger.error("could not capture screenshot from display")
 
     def _save(self):
-        if self.ts:
-            if self.ts + 100 < time.time():
+        for i, t, l, f in self.save_timers:
+            if t + l < time.time():
                 with self.keyboard.pressed(Key.shift):
-                    self._press_key(Key.f1)
-                logger.debug("saved current gamestate to f1")
+                    self._press_key(f)
+                logger.info("saved state to " + str(f) + " after " + str(l) + " seconds")
+                self.save_timers[i][1] = time.time()
+
 
     def _load(self):
         self._press_key(Key.f1)
